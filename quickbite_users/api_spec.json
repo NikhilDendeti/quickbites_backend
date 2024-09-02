@@ -1,0 +1,231 @@
+{
+  "swagger": "2.0",
+  "host": "officeeats:8080",
+  "basePath": "/api/",
+  "info": {
+    "version": "1.0.0",
+    "title": "Simple API",
+    "description": "A simple API to learn how to write OpenAPI Specification"
+  },
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "oauth": {
+      "tokenUrl": "http://auth.ibtspl.com/oauth2/",
+      "flow": "password",
+      "scopes": {
+        "read": "read users",
+        "write": "create users",
+        "update": "update users",
+        "delete": "delete users",
+        "superuser": "super user permission"
+      },
+      "type": "oauth2"
+    }
+  },
+  "definitions": {
+    "UserAccount": {
+      "type": "object",
+      "properties": {
+        "user_name": {
+          "type": "string"
+        },
+        "mail_id": {
+          "type": "string"
+        },
+
+                "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_name",
+        "mail_id",
+        "pasword"
+      ]
+    },
+    "SigninUser":{
+      "type": "object",
+      "properties": {
+        "user_name":{
+          "type":"string"
+        },
+        "password": {
+          "type": "string"
+        },
+      },
+      "required": [
+      "user_name",
+      "password"
+      ]
+    },
+
+    "CreateNewUserResponse": {
+      "type": "object",
+      "properties": {
+        "user_name": {
+          "type": "string"
+        },
+
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_name",
+        "password"
+      ]
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error_message": {
+          "type": "string",
+          "description": "Description of the error"
+        },
+        "error_enum" :{
+          "type": "string",
+          "enum":[
+            "USER_NAME_ALREADY_EXIST"
+          ]
+        }
+      },
+      "required": [
+        "error"
+      ]
+    },
+    "SigninUserResponce": {
+      "type": "object",
+      "properties": {
+        "user_name": {
+          "type": "string"
+        },
+
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_name",
+        "password"
+      ]
+    },
+    "SigninUserErrorResponce":{
+      "type": "object",
+      "properties": {
+        "error_message": {
+          "type": "string",
+          "description": "Description of the error"
+        },
+        "error_enum" :{
+          "type": "string",
+          "enum":[
+            "INVALID_USER_NAME",
+            "INVALID_PASSWORD"
+          ]
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+
+  },
+  "parameters": {
+    "CreateNewUserParameter": {
+      "name": "User",
+      "in": "body",
+      "description": "The User to create.",
+      "schema": {
+        "$ref": "#/definitions/UserAccount"
+      }
+    },
+    "SigninUserParameter":{
+      "name":"User",
+      "in": "body",
+      "description": "Signin foe the user.",
+       "schema": {
+        "$ref": "#/definitions/SigninUser"
+      }
+    }
+  },
+
+  "paths": {
+    "/create/user": {
+      "post": {
+        "operationId": "create_user",
+        "summary": "Create New User",
+        "description": "Creates a new users and returns the user object. This API is not idempotent.",
+        "security": [
+          {
+            "oauth": [
+              "superuser"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/CreateNewUserParameter"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "schema": {
+              "$ref": "#/definitions/CreateNewUserResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/signin/user":{
+      "post":{
+        "operationId": "signin_user",
+        "summary": "Create New User",
+        "description": "Creates a new users and returns the user object. This API is not idempotent.",
+        "security": [
+          {
+            "oauth": [
+              "superuser"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/SigninUserParameter"
+          }],
+          "responses": {
+          "201": {
+            "description": "User signin successfully",
+            "schema": {
+              "$ref": "#/definitions/SigninUserResponce"
+            }
+          },
+           "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/SigninUserErrorResponce"
+            }
+          }}
+
+
+      }
+    }
+
+  }
+
+}
