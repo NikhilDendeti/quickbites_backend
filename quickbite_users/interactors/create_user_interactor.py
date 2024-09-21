@@ -1,97 +1,67 @@
-import json
-from django.core.exceptions import ValidationError
 import re
-from django.http import HttpResponse, HttpRequest
-from oauth2_provider.views import TokenView
+
+from django.core.exceptions import ValidationError
+from django.db import transaction
+
 from quickbite_users.constants import custom_exceptions
-from quickbite_users.models import UserAccount
+from quickbite_users.constants.enums import RoleEnum
+from quickbite_users.dtos import UserTokenDTO
+from quickbite_users.interactors.mixins.access_tokens_mixin import \
+    AccessTokenMixin
+from quickbite_users.presenters.create_user_presenter import \
+    CreateUserPresenter
+from quickbite_users.storages.user_profile_storage import UserProfileStorage
 
 
-def get_tokens(username, password):
-    from django.conf import settings
-    request = HttpRequest()
-    request.META = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Cache-Control": "no-cache"
-    }
-    request.method = 'POST'
-    request.POST = {
-        "client_id": settings.CLIENT_ID,
-        "client_secret": settings.CLIENT_SECRET,
-        "grant_type": "password",
-        "scope": "write",
-        "username": username,
-        "password": password
-    }
+class CreateUserInteractor(AccessTokenMixin):
+    def __init__(
+            self,
+            user_profile_storge: UserProfileStorage
+    ):
+        self.user_profile_storge = user_profile_storge
 
-    token_view = TokenView()
-    try:
-
-        url, headers, body, status_code = token_view.create_token_response(
-            request)
-
-    except Exception as err:
-        raise custom_exceptions.GetTokensFailedException
-
-    return body
-
-
-class CreateUserInteractor:
+    @transaction.atomic()
     def create_user_wrapper(
-            self, username: str, email: str, password: str):
+            self, username: str, email: str, password: str,
+            presenter: CreateUserPresenter
+    ):
         try:
             tokens = self.create_user(username, email, password)
         except custom_exceptions.UserNameAlreadyExistsException:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": "User Already Exist"
-                }
-            ))
+            return presenter.get_user_already_exist_response()
         except custom_exceptions.GetTokensFailedException:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": "Token generation failed"
-                }
-            ))
-        except custom_exceptions.InvalidUserNameLengthException as e:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": e.error_message
-                }
-            ))
-        except custom_exceptions.InvalidUserNameFormatException as e:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": e.error_message
-                }
-            ))
+            return presenter.get_token_generation_failed_response()
+        except custom_exceptions.InvalidUserNameLengthException:
+            return presenter.get_invalid_user_name_length_response()
+        except custom_exceptions.InvalidUserNameFormatException:
+            return presenter.get_invalid_user_name_format_response()
         except custom_exceptions.InvalidEmailException:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": "Incorrect Mail Format"
-                }
-            ))
-        except custom_exceptions.InvalidPasswordFormat:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": "Incorrect Password Format"
-                }
-            ))
-        return HttpResponse(status=201, content=tokens)
+            return presenter.get_invalid_email_response()
+        except custom_exceptions.InvalidPasswordFormat as err:
+            return presenter.get_invalid_password_format(err.messages)
+        return presenter.get_success_response(tokens)
 
     def create_user(
-            self, username: str, email: str, password: str):
+            self, username: str, email: str, password: str) -> UserTokenDTO:
 
         self._validate_create_user_details(
             username=username, email=email, password=password)
-        UserAccount.objects.create_user(
-            username=username,
-            email=email,
-            password=password)
 
-        # todo: have to create the UserRoleProfile based on the data given
+        user_id = self.user_profile_storge.create_user_account(username, email,
+                                                               password)
+        self._create_user_role_profile(user_id)
 
-        return get_tokens(username, password)
+        print("123456789")
+        tokens = self.get_tokens(username, password)
+
+        user_token_dto = UserTokenDTO(
+            user_id=user_id,
+            expires_in=tokens.expires_in,
+            access_token=tokens.access_token,
+            refresh_token=tokens.refresh_token
+        )
+
+        return user_token_dto
 
     def _validate_create_user_details(
             self, username: str, email: str, password: str):
@@ -100,11 +70,8 @@ class CreateUserInteractor:
         self._validate_password(password)
         self._validate_is_user_exists(username)
 
-    @staticmethod
-    def _validate_is_user_exists(username: str):
-        is_user_exists = UserAccount.objects.filter(
-            username=username
-        ).exists()
+    def _validate_is_user_exists(self, username: str):
+        is_user_exists = self.user_profile_storge.is_user_exists(username)
         if is_user_exists:
             raise custom_exceptions.UserNameAlreadyExistsException
 
@@ -135,3 +102,7 @@ class CreateUserInteractor:
             validate_password(password)
         except ValidationError as e:
             raise custom_exceptions.InvalidPasswordFormat(e.messages)
+
+    def _create_user_role_profile(self, user_id: str):
+        role = RoleEnum.student.value
+        self.user_profile_storge.create_user_profile(user_id, role)

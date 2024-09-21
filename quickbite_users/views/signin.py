@@ -1,19 +1,26 @@
-from django.views.decorators.csrf import csrf_exempt
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from rest_framework.decorators import api_view, authentication_classes
-from django.http import JsonResponse
 import json
-from django.core.exceptions import ValidationError
-import re
+from http.client import HTTPResponse
+
+from django.http import HttpResponse
+from rest_framework.decorators import api_view, authentication_classes, \
+    permission_classes
+
+from quickbite_users.serializers import SigninRequestSerializer
 
 
-# @api_view(["POST"])
-@csrf_exempt
+@api_view(["POST"])
+@authentication_classes([])
+@permission_classes([])
 def sign_in(request):
-    # Accessing the data using DRF's request.data
     data = json.loads(request.body)
+    serializer = SigninRequestSerializer(data=data)
+    if not serializer.is_valid():
+        return HttpResponse(
+            json.dumps(
+                {"error": "Invalid Data", "details": serializer.errors}),
+            status=400
+        )
 
-    # Example usage of the parsed data
     username = data.get('username')
     password = data.get('password')
 
@@ -21,11 +28,15 @@ def sign_in(request):
 
     from quickbite_users.interactors.signin_user_interactor import \
         SignInInteractor
-    interactor = SignInInteractor()
+    from quickbite_users.storages.user_profile_storage import \
+        UserProfileStorage
+
+    interactor = SignInInteractor(
+        user_profile_storge=UserProfileStorage(),
+    )
 
     # Get the result from the interactor
     result = interactor.login_user_wrapper(
         username=username, password=password)
 
     return result
-

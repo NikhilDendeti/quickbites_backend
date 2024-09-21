@@ -1,14 +1,17 @@
-from django.db import models
-from django.core.validators import MinLengthValidator
+import uuid
+
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CASCADE
+from django.db import models
 
 
 class UserAccount(AbstractUser):
-    pass
+    user_id = models.UUIDField(
+        primary_key=True, editable=False, default=uuid.uuid4)
 
 
-class UserRoleProfile(models.Model):
+class   UserProfileDetails(models.Model):
+    id = models.UUIDField(
+        primary_key=True, editable=False, default=uuid.uuid4)
     ROLE_CHOICES = [
         ('vendor', 'VENDOR'),
         ('student', 'STUDENT'),
@@ -19,20 +22,3 @@ class UserRoleProfile(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.role}"
-
-
-# request_body = {
-#     "username": "str"
-# }
-#
-# response_200 = {
-#     "role_type": "str",
-#     "enum":[
-#         ""
-#     ]
-# }
-#
-# response_400 = {
-#     " invalid username",
-#
-# }

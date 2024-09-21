@@ -1,6 +1,6 @@
 {
   "swagger": "2.0",
-  "host": "officeeats:8080",
+  "host": "quickeats:8000",
   "basePath": "/api/",
   "info": {
     "version": "1.0.0",
@@ -22,11 +22,11 @@
       "tokenUrl": "http://auth.ibtspl.com/oauth2/",
       "flow": "password",
       "scopes": {
-        "read": "read users",
-        "write": "create users",
-        "update": "update users",
-        "delete": "delete users",
-        "superuser": "super user permission"
+        "read": "Read user details",
+        "write": "Create users",
+        "update": "Update users",
+        "delete": "Delete users",
+        "superuser": "Super user permissions"
       },
       "type": "oauth2"
     }
@@ -41,103 +41,136 @@
         "mail_id": {
           "type": "string"
         },
-
-                "password": {
+        "password": {
           "type": "string"
         }
       },
       "required": [
         "user_name",
         "mail_id",
-        "pasword"
+        "password"
       ]
     },
-    "SigninUser":{
+    "SigninUser": {
       "type": "object",
       "properties": {
-        "user_name":{
-          "type":"string"
+        "user_name": {
+          "type": "string"
         },
         "password": {
           "type": "string"
-        },
+        }
       },
       "required": [
-      "user_name",
-      "password"
+        "user_name",
+        "password"
       ]
     },
-
+    "GetUserProfile": {
+      "type": "object",
+      "properties": {
+        "user_name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "vendor",
+            "student",
+            "employee"
+          ]
+        }
+      },
+      "required": [
+        "user_name",
+        "phone_number",
+        "profile_pic",
+        "email",
+        "role"
+      ]
+    },
     "CreateNewUserResponse": {
       "type": "object",
       "properties": {
-        "user_name": {
+        "access_token": {
           "type": "string"
         },
-
-        "password": {
+        "expires_in": {
+          "type": "string"
+        },
+        "token_type": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "refresh_token": {
           "type": "string"
         }
       },
       "required": [
-        "user_name",
-        "password"
+        "access_token",
+        "expires_in",
+        "token_type",
+        "scope",
+        "refresh_token"
       ]
     },
-    "ErrorResponse": {
+    "ProfileErrorResponse": {
       "type": "object",
       "properties": {
         "error_message": {
           "type": "string",
           "description": "Description of the error"
         },
-        "error_enum" :{
+        "error_enum": {
           "type": "string",
-          "enum":[
-            "USER_NAME_ALREADY_EXIST"
-          ]
-        }
-      },
-      "required": [
-        "error"
-      ]
-    },
-    "SigninUserResponce": {
-      "type": "object",
-      "properties": {
-        "user_name": {
-          "type": "string"
-        },
-
-        "password": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "user_name",
-        "password"
-      ]
-    },
-    "SigninUserErrorResponce":{
-      "type": "object",
-      "properties": {
-        "error_message": {
-          "type": "string",
-          "description": "Description of the error"
-        },
-        "error_enum" :{
-          "type": "string",
-          "enum":[
+          "enum": [
+            "USER_NAME_ALREADY_EXIST",
             "INVALID_USER_NAME",
-            "INVALID_PASSWORD"
+            "INVALID_URL",
+            "INVALID_EMAIL_FORMAT"
           ]
         }
       },
       "required": [
-        "error"
+        "error_message"
+      ]
+    },
+    "GetUserRoleResponse": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "vendor",
+            "student",
+            "employee"
+          ]
+        }
+      },
+      "required": [
+        "role"
+      ]
+    },
+    "SigninUserResponse": {
+      "type": "object",
+      "properties": {
+        "user_name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_name",
+        "password"
       ]
     }
-
   },
   "parameters": {
     "CreateNewUserParameter": {
@@ -148,29 +181,22 @@
         "$ref": "#/definitions/UserAccount"
       }
     },
-    "SigninUserParameter":{
-      "name":"User",
+    "SigninUserParameter": {
+      "name": "User",
       "in": "body",
-      "description": "Signin foe the user.",
-       "schema": {
+      "description": "Sign in the user.",
+      "schema": {
         "$ref": "#/definitions/SigninUser"
       }
     }
   },
-
   "paths": {
-    "/create/user": {
+    "/create/user/v1/": {
       "post": {
         "operationId": "create_user",
         "summary": "Create New User",
-        "description": "Creates a new users and returns the user object. This API is not idempotent.",
-        "security": [
-          {
-            "oauth": [
-              "superuser"
-            ]
-          }
-        ],
+        "description": "Creates a new user and returns the user object. This API is not idempotent.",
+        "security": [],
         "parameters": [
           {
             "$ref": "#/parameters/CreateNewUserParameter"
@@ -182,50 +208,53 @@
             "schema": {
               "$ref": "#/definitions/CreateNewUserResponse"
             }
-          },
-          "400": {
-            "description": "Bad Request",
+          }
+        }
+      }
+    },
+    "/signin/user/v1/": {
+      "post": {
+        "operationId": "signin_user",
+        "summary": "Sign In User",
+        "description": "Signs in a user and returns the user object. This API is not idempotent.",
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/parameters/SigninUserParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User signed in successfully",
             "schema": {
-              "$ref": "#/definitions/ErrorResponse"
+              "$ref": "#/definitions/CreateNewUserResponse"
             }
           }
         }
       }
     },
-    "/signin/user":{
-      "post":{
-        "operationId": "signin_user",
-        "summary": "Create New User",
-        "description": "Creates a new users and returns the user object. This API is not idempotent.",
+    "/get/user/profile/v1": {
+      "get": {
+        "operationId": "get_user_profile",
+        "summary": "Get User Profile Details",
+        "description": "Fetches the profile of the user based on the access token, including the role.",
         "security": [
           {
             "oauth": [
-              "superuser"
+              "read"
             ]
           }
         ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/SigninUserParameter"
-          }],
-          "responses": {
-          "201": {
-            "description": "User signin successfully",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully",
             "schema": {
-              "$ref": "#/definitions/SigninUserResponce"
+              "$ref": "#/definitions/GetUserProfile"
             }
-          },
-           "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#/definitions/SigninUserErrorResponce"
-            }
-          }}
-
-
+          }
+        }
       }
     }
-
   }
-
 }

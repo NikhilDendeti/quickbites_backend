@@ -1,3 +1,4 @@
+
 """
 WSGI config for quickbite_backend project.
 

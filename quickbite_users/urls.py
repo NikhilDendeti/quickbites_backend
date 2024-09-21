@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from quickbite_users.views import create_user, signin
+from quickbite_users.views import create_user, signin, get_profile_details
 
 urlpatterns = [
     path('create/user/', create_user.create_user),
-    path('signin/user/', signin.sign_in)
+    path('signin/user/', signin.sign_in),
+    path('get/user/profile/', get_profile_details.get_profile_details)
 ]

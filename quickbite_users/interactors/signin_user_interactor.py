@@ -1,87 +1,51 @@
-import json
-
 from django.contrib.auth.hashers import check_password
-from django.http import HttpResponse, HttpRequest
-from oauth2_provider.views import TokenView
 
-from quickbite_users.models import UserAccount
+from quickbite_users.constants.custom_exceptions import \
+    UsernameDoesNotExistException, InvalidPasswordException
+from quickbite_users.dtos import TokenDTO, UserTokenDTO
+from quickbite_users.interactors.mixins.access_tokens_mixin import \
+    AccessTokenMixin
+from quickbite_users.presenters.signin_presenter import SigninPresenter
+from quickbite_users.storages.user_profile_storage import UserProfileStorage
 
 
-class UsernameDoesNotExistException(Exception):
-    pass
+class SignInInteractor(AccessTokenMixin):
+    def __init__(
+            self,
+            user_profile_storge: UserProfileStorage,
 
+    ):
+        self.user_profile_storge = user_profile_storge
 
-class InvalidPasswordException(Exception):
-    pass
-class GetTokensFailedException(Exception):
-    pass
-
-class SignInInteractor:
     def login_user_wrapper(
-            self, username: str, password: str):
+            self, username: str, password: str, presenter: SigninPresenter):
         try:
             tokens = self.signin_user(username, password)
         except UsernameDoesNotExistException:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": "User Name Not Exist"
-                }
-            ))
+            return presenter.get_username_does_not_exists_response()
         except InvalidPasswordException:
-            return HttpResponse(status=400, content=json.dumps(
-                {
-                    "error": "Invalid Password"
-                }
-            ))
+            return presenter.get_invalid_password_response()
 
-
-        return HttpResponse(status=200, content=tokens)
+        return presenter.get_success_response(tokens)
 
     def signin_user(
-            self, username: str, password: str):
-        self._validate_username(username)
+            self, username: str, password: str) -> UserTokenDTO:
+        user_account = self.user_profile_storge.get_user_account(
+            username)
+        print(user_account)
+        print(f"password: {password}")
 
-        user_account = UserAccount.objects.get(
-            username=username)
         is_correct = check_password(password, user_account.password)
         if not is_correct:
             raise InvalidPasswordException("Invalid password")
 
         tokens = self.get_tokens(username, password)
 
-        return tokens
+        user_token_dto = UserTokenDTO(
+            user_id=user_account.user_id,
+            expires_in=tokens.expires_in,
+            access_token=tokens.access_token,
+            refresh_token=tokens.refresh_token
+        )
 
-    @staticmethod
-    def _validate_username(username: str):
-        is_user_exists = UserAccount.objects.filter(
-            username=username
-        ).exists()
-
-        if not is_user_exists:
-            raise UsernameDoesNotExistException("Username does not exist")
-
-    @staticmethod
-    def get_tokens(username, password):
-        from django.conf import settings
-        request=HttpRequest()
-        request.META={
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Cache-Control": "no-cache"
-        }
-        request.method='POST'
-        request.POST={
-            "client_id": settings.CLIENT_ID,
-            "client_secret": settings.CLIENT_SECRET,
-            "grant_type": "password",
-            "scope": "write",
-            "username": username,
-            "password": password
-        }
-        token_view=TokenView()
-        try:
-            url, headers, body, status_code = token_view.create_token_response(
-                request)
-        except Exception as err:
-            raise GetTokensFailedException
-
-        return body
+        return user_token_dto
