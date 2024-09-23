@@ -11,9 +11,9 @@ from quickbite_users.tests.factories.models import UserAccountFactory
 
 
 @pytest.mark.django_db
-class TestGetUserAccount(TestCase):
+class TestGetUserAccount:
 
-    def test_get_user_account_when_username_exists(self):
+    def test_get_user_account_when_username_exists(self, snapshot):
         # arrange
         storage = UserProfileStorage()
         username = "user_1"
@@ -36,7 +36,7 @@ class TestGetUserAccount(TestCase):
             username=username)
 
         # assert
-        self.assertEqual(
+        snapshot.assert_match(
             user_account_dto_actual,
             user_account_dto_expected
         )

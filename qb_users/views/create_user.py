@@ -1,10 +1,12 @@
 import json
 
+from django.http import HttpResponse
 from rest_framework.decorators import (api_view, authentication_classes,
                                        permission_classes)
 
 from quickbite_users.presenters.create_user_presenter import \
     CreateUserPresenter
+from quickbite_users.serializers import CreateUserRequestSerializer
 
 
 @api_view(["POST"])
@@ -12,6 +14,13 @@ from quickbite_users.presenters.create_user_presenter import \
 @permission_classes([])
 def create_user(request):
     request_body = json.loads(request.body)
+    serializer=CreateUserRequestSerializer(data=request_body)
+    if not serializer.is_valid():
+        return HttpResponse(
+            json.dumps(
+                {"error": "Invalid Data", "details": serializer.errors}),
+            status=400
+        )
     from quickbite_users.interactors.create_user_interactor import \
         CreateUserInteractor
     from quickbite_users.storages.user_profile_storage import \

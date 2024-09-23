@@ -4,18 +4,15 @@ from typing import List
 from django.http import HttpResponse
 
 from quickbite_users.dtos import UserTokenDTO
+from quickbite_users.serializers import CreateUserResponseSerializer
 
 
 class CreateUserPresenter:
     @staticmethod
     def get_success_response(token_dto: UserTokenDTO):
+        serializer = CreateUserResponseSerializer(token_dto)
         tokens = json.dumps(
-            {
-                "access_token": token_dto.access_token,
-                "refresh_token": token_dto.refresh_token,
-                "expires_in": token_dto.expires_in,
-                "user_id": token_dto.user_id
-            }
+            serializer.data
         )
         return HttpResponse(status=200, content=tokens)
 

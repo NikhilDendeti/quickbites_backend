@@ -2,6 +2,7 @@ from django.http import HttpResponse
 import json
 
 from quickbite_users.dtos import UserProfileCompleteDetailsDTO
+from quickbite_users.serializers import GetUserProfileDetailsResponseSerializer
 
 
 class GetUserDetailsPresenter:
@@ -15,12 +16,9 @@ class GetUserDetailsPresenter:
     @staticmethod
     def get_user_profile_details_success_response(
             user_details_dto: UserProfileCompleteDetailsDTO):
-        tokens=json.dumps(
-            {
-                "username": user_details_dto.username,
-                "email":user_details_dto.email,
-                "role":user_details_dto.role,
-                "user_id":user_details_dto.user_id
-            }
+        serializer = GetUserProfileDetailsResponseSerializer(user_details_dto)
+
+        tokens = json.dumps(
+            serializer.data
         )
-        return HttpResponse(status=200,content=tokens)
+        return HttpResponse(status=200, content=tokens)
