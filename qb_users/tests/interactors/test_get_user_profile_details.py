@@ -2,33 +2,33 @@ from unittest import mock
 
 import pytest
 
-from quickbite_users.constants.custom_exceptions import InvalidUserIdException
+from qb_users.constants.custom_exceptions import InvalidUserIdException
 
 
 @pytest.mark.django_db
 class TestGetUserProfileDetailsInteractor:
     @pytest.fixture()
     def user_profile_storge_mock(self):
-        from quickbite_users.storages.user_profile_storage import \
+        from qb_users.storages.user_profile_storage import \
             UserProfileStorage
         return mock.create_autospec(UserProfileStorage)
 
     @pytest.fixture()
     def presenter_mock(self):
-        from quickbite_users.presenters.get_user_profile_details_presenter import \
+        from qb_users.presenters.get_user_profile_details_presenter import \
             GetUserDetailsPresenter
         return mock.create_autospec(GetUserDetailsPresenter)
 
     @pytest.fixture()
     def interactor(self, user_profile_storge_mock):
-        from quickbite_users.interactors.get_user_profile_datails_interactor import \
+        from qb_users.interactors.get_user_profile_datails_interactor import \
             GetUserProfileDetailsInteractor
         return GetUserProfileDetailsInteractor(
             user_profile_storge=user_profile_storge_mock)
 
     @pytest.fixture()
     def user_profile_details_dto(self):
-        from quickbite_users.dtos import UserProfileCompleteDetailsDTO
+        from qb_users.dtos import UserProfileCompleteDetailsDTO
         return UserProfileCompleteDetailsDTO(
             username="apple",
             email="a@a.com",

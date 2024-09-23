@@ -4,9 +4,9 @@ from django.http import HttpResponse
 from rest_framework.decorators import (api_view, authentication_classes,
                                        permission_classes)
 
-from quickbite_users.presenters.create_user_presenter import \
+from qb_users.presenters.create_user_presenter import \
     CreateUserPresenter
-from quickbite_users.serializers import CreateUserRequestSerializer
+from qb_users.serializers import CreateUserRequestSerializer
 
 
 @api_view(["POST"])
@@ -21,9 +21,9 @@ def create_user(request):
                 {"error": "Invalid Data", "details": serializer.errors}),
             status=400
         )
-    from quickbite_users.interactors.create_user_interactor import \
+    from qb_users.interactors.create_user_interactor import \
         CreateUserInteractor
-    from quickbite_users.storages.user_profile_storage import \
+    from qb_users.storages.user_profile_storage import \
         UserProfileStorage
 
 

@@ -3,14 +3,14 @@ import re
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from quickbite_users.constants import custom_exceptions
-from quickbite_users.constants.enums import RoleEnum
-from quickbite_users.dtos import UserTokenDTO
-from quickbite_users.interactors.mixins.access_tokens_mixin import \
+from qb_users.constants import custom_exceptions
+from qb_users.constants.enums import RoleEnum
+from qb_users.dtos import UserTokenDTO
+from qb_users.interactors.mixins.access_tokens_mixin import \
     AccessTokenMixin
-from quickbite_users.presenters.create_user_presenter import \
+from qb_users.presenters.create_user_presenter import \
     CreateUserPresenter
-from quickbite_users.storages.user_profile_storage import UserProfileStorage
+from qb_users.storages.user_profile_storage import UserProfileStorage
 
 
 class CreateUserInteractor(AccessTokenMixin):

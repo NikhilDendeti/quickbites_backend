@@ -6,7 +6,7 @@ def create_token_response_mock(mocker):
     return mocker.patch(path)
 
 def signin_token_response_mock(mocker):
-    from quickbite_users.interactors.mixins.access_tokens_mixin\
+    from qb_users.interactors.mixins.access_tokens_mixin\
         import AccessTokenMixin
 
     func_to_mock = AccessTokenMixin.get_tokens

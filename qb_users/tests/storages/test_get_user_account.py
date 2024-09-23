@@ -3,11 +3,11 @@ import uuid
 import pytest
 from snapshottest import TestCase
 
-from quickbite_users.constants.custom_exceptions import \
+from qb_users.constants.custom_exceptions import \
     UsernameDoesNotExistException
-from quickbite_users.storages.user_profile_storage import UserProfileStorage
-from quickbite_users.tests.factories.dtos import UserAccountDTOFactory
-from quickbite_users.tests.factories.models import UserAccountFactory
+from qb_users.storages.user_profile_storage import UserProfileStorage
+from qb_users.tests.factories.dtos import UserAccountDTOFactory
+from qb_users.tests.factories.models import UserAccountFactory
 
 
 @pytest.mark.django_db

@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view, authentication_classes, \
     permission_classes
 
-from quickbite_users.serializers import SigninRequestSerializer
+from qb_users.serializers import SigninRequestSerializer
 
 
 @api_view(["POST"])
@@ -26,9 +26,9 @@ def sign_in(request):
 
     print(f"Username: {username}, Password: {password}")
 
-    from quickbite_users.interactors.signin_user_interactor import \
+    from qb_users.interactors.signin_user_interactor import \
         SignInInteractor
-    from quickbite_users.storages.user_profile_storage import \
+    from qb_users.storages.user_profile_storage import \
         UserProfileStorage
 
     interactor = SignInInteractor(

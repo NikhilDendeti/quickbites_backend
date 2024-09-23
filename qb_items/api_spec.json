@@ -1,0 +1,100 @@
+{
+  "swagger": "2.0",
+  "host": "quickeats:8000",
+  "basePath": "/api/",
+  "info": {
+    "version": "1.0.0",
+    "title": "Simple API",
+    "description": "A simple API to learn how to write OpenAPI Specification"
+  },
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/get/categories/v1": {
+      "get": {
+        "operationId": "get_categories",
+        "summary": "Get Food Item Details",
+        "description": "Fetches the food items based on the category",
+        "responses": {
+          "200": {
+            "description": "Food Item details retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/GetFoodItemDetails"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GetFoodItemDetails": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "category_id": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "item_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "item_image_url": {
+                      "type": "string"
+                    },
+                    "is_veg": {
+                      "type": "boolean"
+                    },
+                    "price": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "item_id",
+                    "name",
+                    "description",
+                    "item_image_url",
+                    "is_veg",
+                    "price"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "name",
+              "category_id",
+              "items"
+            ]
+          }
+        }
+      },
+      "required": [
+        "categories"
+      ]
+    }
+  }
+}

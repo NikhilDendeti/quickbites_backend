@@ -1,13 +1,13 @@
 import json
 from snapshottest import TestCase
 
-from quickbite_users.tests.factories.dtos import \
+from qb_users.tests.factories.dtos import \
     UserProfileCompleteDetailsDTOFactory
 
 
 class TestGetUserDetailsPresenter(TestCase):
     def test_for_invalid_user_response(self):
-        from quickbite_users.presenters.get_user_profile_details_presenter import \
+        from qb_users.presenters.get_user_profile_details_presenter import \
             GetUserDetailsPresenter
         presenter = GetUserDetailsPresenter()
         # act
@@ -16,7 +16,7 @@ class TestGetUserDetailsPresenter(TestCase):
         self.assertMatchSnapshot(json.loads(response.content), 'response_data')
 
     def test_for_user_profile_details_success_response(self):
-        from quickbite_users.presenters.get_user_profile_details_presenter import \
+        from qb_users.presenters.get_user_profile_details_presenter import \
             GetUserDetailsPresenter
         presenter = GetUserDetailsPresenter()
         # arrange

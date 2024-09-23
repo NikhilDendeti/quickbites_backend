@@ -3,8 +3,8 @@ import json
 from django.core.serializers import serialize
 from django.http import HttpResponse
 
-from quickbite_users.dtos import UserTokenDTO
-from quickbite_users.serializers import SigninResponseSerializer
+from qb_users.dtos import UserTokenDTO
+from qb_users.serializers import SigninResponseSerializer
 
 
 class SigninPresenter:

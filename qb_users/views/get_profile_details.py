@@ -5,11 +5,11 @@ from rest_framework.decorators import api_view
 def get_profile_details(request):
     user = request.user
     user_id = user.user_id
-    from quickbite_users.interactors.get_user_profile_datails_interactor import \
+    from qb_users.interactors.get_user_profile_datails_interactor import \
         GetUserProfileDetailsInteractor
-    from quickbite_users.storages.user_profile_storage import \
+    from qb_users.storages.user_profile_storage import \
         UserProfileStorage
-    from quickbite_users.presenters.get_user_profile_details_presenter import \
+    from qb_users.presenters.get_user_profile_details_presenter import \
         GetUserDetailsPresenter
 
     presenter = GetUserDetailsPresenter()

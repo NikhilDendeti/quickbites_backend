@@ -4,29 +4,29 @@ from unittest import mock
 import pytest
 from django.contrib.auth.hashers import make_password
 
-from quickbite_users.constants.custom_exceptions import \
+from qb_users.constants.custom_exceptions import \
     InvalidUserNameFormatException
-from quickbite_users.tests.factories.dtos import UserAccountDTOFactory
+from qb_users.tests.factories.dtos import UserAccountDTOFactory
 
 
 class TestSignInInteractor:
     @pytest.fixture()
     def user_profile_storge_mock(self):
-        from quickbite_users.storages.user_profile_storage import \
+        from qb_users.storages.user_profile_storage import \
             UserProfileStorage
         return (mock.create_autospec(UserProfileStorage)
                 )
 
     @pytest.fixture()
     def presenter_mock(self):
-        from quickbite_users.presenters.signin_presenter import \
+        from qb_users.presenters.signin_presenter import \
             SigninPresenter
         return (mock.create_autospec(SigninPresenter)
                 )
 
     @pytest.fixture()
     def interactor(self, user_profile_storge_mock):
-        from quickbite_users.interactors.signin_user_interactor import \
+        from qb_users.interactors.signin_user_interactor import \
             SignInInteractor
         return (SignInInteractor(
             user_profile_storge=user_profile_storge_mock)
@@ -34,7 +34,7 @@ class TestSignInInteractor:
 
     @pytest.fixture()
     def user_token_dto(self):
-        from quickbite_users.dtos import UserTokenDTO
+        from qb_users.dtos import UserTokenDTO
         return (UserTokenDTO(
             user_id="user_id_1",
             expires_in="100",
@@ -44,7 +44,7 @@ class TestSignInInteractor:
 
     @pytest.fixture()
     def signin_token_response_mocker(self, mocker):
-        from quickbite_users.tests.mocks import \
+        from qb_users.tests.mocks import \
             signin_token_response_mock
         return signin_token_response_mock(mocker)
 

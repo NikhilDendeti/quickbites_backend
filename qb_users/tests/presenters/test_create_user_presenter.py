@@ -1,12 +1,12 @@
 import json
 
-from quickbite_users.tests.factories.dtos import UserTokenDTOFactory
+from qb_users.tests.factories.dtos import UserTokenDTOFactory
 
 
 class TestCreateUserPresenter:
 
     def test_for_success_case(self, snapshot):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         presenter = CreateUserPresenter()
         # arrange
@@ -24,7 +24,7 @@ class TestCreateUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_user_already_exist(self, snapshot):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         presenter = CreateUserPresenter()
         # act
@@ -33,7 +33,7 @@ class TestCreateUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_token_generation_failed(self, snapshot):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         presenter = CreateUserPresenter()
         # act
@@ -42,7 +42,7 @@ class TestCreateUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_invalid_user_name_length(self, snapshot):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         presenter = CreateUserPresenter()
         # act
@@ -51,7 +51,7 @@ class TestCreateUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_invalid_user_name_format(self, snapshot):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         presenter = CreateUserPresenter()
         # act
@@ -60,7 +60,7 @@ class TestCreateUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_invalid_email(self, snapshot):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         presenter = CreateUserPresenter()
         # act
@@ -69,7 +69,7 @@ class TestCreateUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_invalid_password_format(self, snapshot):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         presenter = CreateUserPresenter()
         # act

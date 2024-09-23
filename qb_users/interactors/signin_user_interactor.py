@@ -1,12 +1,12 @@
 from django.contrib.auth.hashers import check_password
 
-from quickbite_users.constants.custom_exceptions import \
+from qb_users.constants.custom_exceptions import \
     UsernameDoesNotExistException, InvalidPasswordException
-from quickbite_users.dtos import TokenDTO, UserTokenDTO
-from quickbite_users.interactors.mixins.access_tokens_mixin import \
+from qb_users.dtos import TokenDTO, UserTokenDTO
+from qb_users.interactors.mixins.access_tokens_mixin import \
     AccessTokenMixin
-from quickbite_users.presenters.signin_presenter import SigninPresenter
-from quickbite_users.storages.user_profile_storage import UserProfileStorage
+from qb_users.presenters.signin_presenter import SigninPresenter
+from qb_users.storages.user_profile_storage import UserProfileStorage
 
 
 class SignInInteractor(AccessTokenMixin):

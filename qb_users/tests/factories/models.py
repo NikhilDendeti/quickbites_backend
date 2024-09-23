@@ -1,7 +1,7 @@
 import factory
 import uuid
 from django.contrib.auth.hashers import make_password
-from quickbite_users.models import UserAccount, UserProfileDetails
+from qb_users.models import UserAccount, UserProfileDetails
 
 
 class UserAccountFactory(factory.django.DjangoModelFactory):

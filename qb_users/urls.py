@@ -1,5 +1,5 @@
 """
-URL configuration for quickbite_backend project.
+URL configuration for qb_backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from quickbite_users.views import create_user, signin, get_profile_details
+from qb_users.views import create_user, signin, get_profile_details
 
 urlpatterns = [
     path('create/user/', create_user.create_user),

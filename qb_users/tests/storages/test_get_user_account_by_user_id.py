@@ -1,8 +1,8 @@
 import pytest
 from django.test import TestCase
-from quickbite_users.models import UserAccount
-from quickbite_users.storages.user_profile_storage import UserProfileStorage
-from quickbite_users.tests.factories.dtos import UserAccountDTOFactory
+from qb_users.models import UserAccount
+from qb_users.storages.user_profile_storage import UserProfileStorage
+from qb_users.tests.factories.dtos import UserAccountDTOFactory
 from django.contrib.auth.hashers import check_password
 
 @pytest.mark.django_db

@@ -1,11 +1,11 @@
 import json
 
-from quickbite_users.tests.factories.dtos import UserTokenDTOFactory
+from qb_users.tests.factories.dtos import UserTokenDTOFactory
 
 
 class TestSigninUserPresenter:
     def test_for_success_response(self, snapshot):
-        from quickbite_users.presenters.signin_presenter import SigninPresenter
+        from qb_users.presenters.signin_presenter import SigninPresenter
         presenter = SigninPresenter()
         # arrange
         token_dto = UserTokenDTOFactory(
@@ -20,7 +20,7 @@ class TestSigninUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_username_does_not_exists_response(self, snapshot):
-        from quickbite_users.presenters.signin_presenter import SigninPresenter
+        from qb_users.presenters.signin_presenter import SigninPresenter
         presenter = SigninPresenter()
         # act
         response = presenter.get_username_does_not_exists_response()
@@ -28,7 +28,7 @@ class TestSigninUserPresenter:
         snapshot.assert_match(json.loads(response.content), 'response_data')
 
     def test_for_invalid_password_response(self, snapshot):
-        from quickbite_users.presenters.signin_presenter import SigninPresenter
+        from qb_users.presenters.signin_presenter import SigninPresenter
         presenter = SigninPresenter()
         # act
         response = presenter.get_invalid_password_response()

@@ -1,5 +1,5 @@
 import typing
-from quickbite_users.constants import *
+from qb_users.constants import *
 
 
 

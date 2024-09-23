@@ -1,7 +1,7 @@
-from quickbite_users.constants.custom_exceptions import InvalidUserIdException, \
+from qb_users.constants.custom_exceptions import InvalidUserIdException, \
     UsernameDoesNotExistException
-from quickbite_users.dtos import UserAccountDTO, UserProfileDetailsDTO
-from quickbite_users.models import UserAccount, UserProfileDetails
+from qb_users.dtos import UserAccountDTO, UserProfileDetailsDTO
+from qb_users.models import UserAccount, UserProfileDetails
 
 
 class UserProfileStorage:

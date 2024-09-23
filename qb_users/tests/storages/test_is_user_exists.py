@@ -1,16 +1,16 @@
 import uuid
 from snapshottest import TestCase
 import pytest
-from quickbite_users.dtos import UserAccountDTO
-from quickbite_users.models import UserAccount, UserProfileDetails
-from quickbite_users.tests.factories.models import UserAccountFactory
+from qb_users.dtos import UserAccountDTO
+from qb_users.models import UserAccount, UserProfileDetails
+from qb_users.tests.factories.models import UserAccountFactory
 
 
 @pytest.mark.django_db
 class TestIsUserExists(TestCase):
 
     def  test_is_user_exists_when_user_exists(self):
-        from quickbite_users.storages.user_profile_storage import \
+        from qb_users.storages.user_profile_storage import \
             UserProfileStorage
         storage = UserProfileStorage()
          # arrange
@@ -28,7 +28,7 @@ class TestIsUserExists(TestCase):
         self.assertTrue(is_user_exists)
 
     def  test_is_user_exists_when_user_not_exists(self):
-        from quickbite_users.storages.user_profile_storage import \
+        from qb_users.storages.user_profile_storage import \
             UserProfileStorage
         storage = UserProfileStorage()
          # arrange

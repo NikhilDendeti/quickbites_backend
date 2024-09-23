@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 import json
 
-from quickbite_users.dtos import UserProfileCompleteDetailsDTO
-from quickbite_users.serializers import GetUserProfileDetailsResponseSerializer
+from qb_users.dtos import UserProfileCompleteDetailsDTO
+from qb_users.serializers import GetUserProfileDetailsResponseSerializer
 
 
 class GetUserDetailsPresenter:

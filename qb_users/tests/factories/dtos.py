@@ -1,6 +1,6 @@
 import factory
 from factory import Sequence
-from quickbite_users.dtos import UserAccountDTO, TokenDTO, UserTokenDTO, \
+from qb_users.dtos import UserAccountDTO, TokenDTO, UserTokenDTO, \
     UserSigninDTO, UserProfileCompleteDetailsDTO, UserProfileDetailsDTO
 
 

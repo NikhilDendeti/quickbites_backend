@@ -1,7 +1,7 @@
 import pytest
 from django.test import TestCase
-from quickbite_users.models import UserAccount
-from quickbite_users.storages.user_profile_storage import UserProfileStorage
+from qb_users.models import UserAccount
+from qb_users.storages.user_profile_storage import UserProfileStorage
 
 
 @pytest.mark.django_db

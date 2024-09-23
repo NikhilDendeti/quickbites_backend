@@ -1,6 +1,6 @@
 
 """
-WSGI config for quickbite_backend project.
+WSGI config for qb_backend project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -12,6 +12,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'quickbite_backend.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'qb_backend.settings')
 
 application = get_wsgi_application()

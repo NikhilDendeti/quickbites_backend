@@ -1,4 +1,4 @@
-from quickbite_users.models.user_profile import UserAccount, UserProfileDetails
+from qb_users.models.user_profile import UserAccount, UserProfileDetails
 
 
 __all__ = [

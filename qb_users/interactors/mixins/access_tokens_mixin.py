@@ -3,9 +3,9 @@ import json
 from django.http import HttpRequest
 from oauth2_provider.views import TokenView
 
-from quickbite_users.constants.custom_exceptions import \
+from qb_users.constants.custom_exceptions import \
     GetTokensFailedException
-from quickbite_users.dtos import TokenDTO
+from qb_users.dtos import TokenDTO
 
 
 class AccessTokenMixin:

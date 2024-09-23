@@ -9,26 +9,26 @@ class TestCreateUserInteractor:
 
     @pytest.fixture()
     def user_profile_storge_mock(self):
-        from quickbite_users.storages.user_profile_storage import \
+        from qb_users.storages.user_profile_storage import \
             UserProfileStorage
         return mock.create_autospec(UserProfileStorage)
 
     @pytest.fixture
     def presenter_mock(self):
-        from quickbite_users.presenters.create_user_presenter import \
+        from qb_users.presenters.create_user_presenter import \
             CreateUserPresenter
         return mock.create_autospec(CreateUserPresenter)
 
     @pytest.fixture
     def interactor(self, user_profile_storge_mock):
-        from quickbite_users.interactors.create_user_interactor import \
+        from qb_users.interactors.create_user_interactor import \
             CreateUserInteractor
         return CreateUserInteractor(
             user_profile_storge=user_profile_storge_mock)
 
     @pytest.fixture()
     def create_token_response_mocker(self, mocker):
-        from quickbite_users.tests.mocks import  create_token_response_mock
+        from qb_users.tests.mocks import  create_token_response_mock
         return create_token_response_mock(mocker)
 
     def test_for_valid_details_called_get_success_response(

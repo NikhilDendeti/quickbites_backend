@@ -1,5 +1,5 @@
 """
-URL configuration for quickbite_backend project.
+URL configuration for qb_backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -20,5 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    path('quickbite_users/', include('quickbite_users.urls'))
+    path('qb_users/', include('qb_users.urls'))
 ]

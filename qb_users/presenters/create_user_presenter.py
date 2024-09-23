@@ -3,8 +3,8 @@ from typing import List
 
 from django.http import HttpResponse
 
-from quickbite_users.dtos import UserTokenDTO
-from quickbite_users.serializers import CreateUserResponseSerializer
+from qb_users.dtos import UserTokenDTO
+from qb_users.serializers import CreateUserResponseSerializer
 
 
 class CreateUserPresenter:

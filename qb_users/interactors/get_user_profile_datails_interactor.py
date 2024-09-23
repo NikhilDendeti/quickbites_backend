@@ -1,8 +1,8 @@
-from quickbite_users.constants.custom_exceptions import InvalidUserIdException
-from quickbite_users.dtos import UserProfileCompleteDetailsDTO
-from quickbite_users.presenters.get_user_profile_details_presenter import \
+from qb_users.constants.custom_exceptions import InvalidUserIdException
+from qb_users.dtos import UserProfileCompleteDetailsDTO
+from qb_users.presenters.get_user_profile_details_presenter import \
     GetUserDetailsPresenter
-from quickbite_users.storages.user_profile_storage import UserProfileStorage
+from qb_users.storages.user_profile_storage import UserProfileStorage
 
 
 class GetUserProfileDetailsInteractor:

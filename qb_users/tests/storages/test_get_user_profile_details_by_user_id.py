@@ -1,11 +1,11 @@
 import pytest
 from django.test import TestCase
 
-from quickbite_users.dtos import UserProfileDetailsDTO
-from quickbite_users.models import UserAccount, UserProfileDetails
-from quickbite_users.storages.user_profile_storage import UserProfileStorage
-from quickbite_users.tests.factories.dtos import UserProfileDetailsDTOFactory
-from quickbite_users.tests.factories.models import UserProfileDetailsFactory, UserAccountFactory
+from qb_users.dtos import UserProfileDetailsDTO
+from qb_users.models import UserAccount, UserProfileDetails
+from qb_users.storages.user_profile_storage import UserProfileStorage
+from qb_users.tests.factories.dtos import UserProfileDetailsDTOFactory
+from qb_users.tests.factories.models import UserProfileDetailsFactory, UserAccountFactory
 
 
 @pytest.mark.django_db
