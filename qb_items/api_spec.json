@@ -90,10 +90,25 @@
               "items"
             ]
           }
+        },
+        "user_selected_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item_id": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              }
+            }
+          }
         }
       },
       "required": [
-        "categories"
+        "categories",
+        "user_selected_items"
       ]
     }
   }
