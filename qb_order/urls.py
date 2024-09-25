@@ -1,3 +1,5 @@
+from django.contrib import admin
+from qb_order.models.orders import UserOrder, UserOrderItem
 from qb_order.views import get_categories
 from qb_users.urls import urlpatterns
 from django.urls import path

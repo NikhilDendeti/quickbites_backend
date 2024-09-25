@@ -4,7 +4,7 @@ from django.db import models
 import uuid
 
 
-class OrderStatusEnum(Enum):
+class OrderStatus(Enum):
     IN_PROGRESS = "IN_PROGRESS"
     COMPLETED = "COMPLETED"
     CANCELLED = "CANCELLED"

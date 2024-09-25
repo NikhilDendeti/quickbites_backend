@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 
-from qb_order.models.items import OrderStatusEnum, FoodItem
+from qb_order.models.items import OrderStatus, FoodItem
 
 
 class UserOrder(models.Model):
@@ -13,8 +13,8 @@ class UserOrder(models.Model):
     order_updated_at = models.DateTimeField(auto_now=True)
     user_id = models.CharField(editable=False, max_length=150)
     status = models.CharField(max_length=150,
-                              choices=OrderStatusEnum.choices(),
-                              default=OrderStatusEnum.IN_PROGRESS.value)
+                              choices=OrderStatus.choices(),
+                              default=OrderStatus.IN_PROGRESS.value)
 
 
 class UserOrderItem(models.Model):
