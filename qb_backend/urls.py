@@ -20,5 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    path('qb_users/', include('qb_users.urls'))
+    path('qb_users/', include('qb_users.urls')),
+    path('qb_order/',include('qb_order.urls'))
 ]

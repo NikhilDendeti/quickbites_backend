@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'qb_users',
     'oauth2_provider',
-    'rest_framework'
+    'rest_framework',
+    'qb_order'
 ]
 
 MIDDLEWARE = [

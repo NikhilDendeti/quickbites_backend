@@ -1,5 +1,17 @@
+from enum import Enum
+
 from django.db import models
 import uuid
+
+
+class OrderStatusEnum(Enum):
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+
+    @classmethod
+    def choices(cls):
+        return [(status.value, status.name) for status in cls]
 
 
 class Category(models.Model):
@@ -20,21 +32,9 @@ class FoodItem(models.Model):
     description = models.TextField()
     item_image_url = models.URLField()
     is_veg = models.BooleanField()
+    is_available = models.BooleanField()
 
     def __str__(self):
         return self.name
-
-
-class FoodItemsSelection(models.Model):
-    selection_id = models.UUIDField(primary_key=True, editable=False,
-                                    default=uuid.uuid4)
-    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
-    selected_items_count = models.IntegerField(default=0)
-    selection_date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.selected_items_count} of {self.food_item.name} on {self.selection_date}'
-
-
 
 

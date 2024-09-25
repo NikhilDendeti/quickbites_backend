@@ -1,6 +1,6 @@
 {
   "swagger": "2.0",
-  "host": "quickeats:8000",
+  "host": "qb:8000",
   "basePath": "/api/",
   "info": {
     "version": "1.0.0",
@@ -29,6 +29,24 @@
             "schema": {
               "$ref": "#/definitions/GetFoodItemDetails"
             }
+          }
+        }
+      }
+    },
+    "/get/user/order/details/v1": {
+      "get": {
+        "operationId": "get_user_order_details",
+        "summary": "Get User Order Details",
+        "description": "Fetches the order details for a specific user",
+        "responses": {
+          "200": {
+            "description": "User order details retrieved successfully",
+            "schema": {
+              "$ref": "#/definitions/UserOrder"
+            }
+          },
+          "404": {
+            "description": "Order not found"
           }
         }
       }
@@ -90,8 +108,40 @@
               "items"
             ]
           }
+        }
+      },
+      "required": [
+        "categories"
+      ]
+    },
+    "UserOrder": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string"
         },
-        "user_selected_items": {
+        "total_amount": {
+          "type": "number"
+        },
+        "order_created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "order_updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "user_id":{
+          "type":"string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["IN_PROGRESS", "COMPLETED", "CANCELLED"]
+        },
+        "total_items_count": {
+          "type": "integer"
+        },
+        "items": {
           "type": "array",
           "items": {
             "type": "object",
@@ -101,14 +151,26 @@
               },
               "count": {
                 "type": "integer"
+              },
+              "total_amount": {
+                "type": "number"
               }
-            }
+            },
+            "required": [
+              "item_id",
+              "count",
+              "total_amount"
+            ]
           }
         }
       },
       "required": [
-        "categories",
-        "user_selected_items"
+        "order_id",
+        "total_amount",
+        "order_created_at",
+        "status",
+        "total_items_count",
+        "items"
       ]
     }
   }

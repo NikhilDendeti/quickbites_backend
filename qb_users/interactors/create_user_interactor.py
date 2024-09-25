@@ -51,7 +51,6 @@ class CreateUserInteractor(AccessTokenMixin):
                                                                password)
         self._create_user_role_profile(user_id)
 
-        print("123456789")
         tokens = self.get_tokens(username, password)
 
         user_token_dto = UserTokenDTO(
