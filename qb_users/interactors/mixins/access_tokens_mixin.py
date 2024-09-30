@@ -6,12 +6,11 @@ from oauth2_provider.views import TokenView
 from qb_users.constants.custom_exceptions import \
     GetTokensFailedException
 from qb_users.dtos import TokenDTO
-
-
+from qb_backend import settings
 class AccessTokenMixin:
     @staticmethod
     def get_tokens(username, password) -> TokenDTO:
-        from django.conf import settings
+        # from django.conf import settings
         request = HttpRequest()
         request.META = {
             "Content-Type": "application/x-www-form-urlencoded",

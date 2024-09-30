@@ -1,9 +1,13 @@
-from django.contrib import admin
-from qb_order.models.orders import UserOrder, UserOrderItem
 from qb_order.views import get_categories
-from qb_users.urls import urlpatterns
 from django.urls import path
 
-urlpatterns=[
-    path('get/categories/', get_categories.get_categories)
+from django.urls import path
+
+from qb_order.views.get_categories import get_categories
+from qb_order.views.get_user_order_details import create_user_order
+
+urlpatterns = [
+    path('get/categories/', get_categories),
+    path('create/user/order/',create_user_order)
+
 ]

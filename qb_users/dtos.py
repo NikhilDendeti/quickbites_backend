@@ -10,7 +10,7 @@ class UserAccountDTO:
 
 
 @dataclass
-class   TokenDTO:
+class TokenDTO:
     access_token: str
     refresh_token: str
     expires_in: str

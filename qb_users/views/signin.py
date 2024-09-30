@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view, authentication_classes, \
     permission_classes
 
+from qb_users.presenters.signin_presenter import SigninPresenter
 from qb_users.serializers import SigninRequestSerializer
 
 
@@ -37,6 +38,6 @@ def sign_in(request):
 
     # Get the result from the interactor
     result = interactor.login_user_wrapper(
-        username=username, password=password)
+        username=username, password=password,presenter= SigninPresenter)
 
     return result

@@ -1,24 +1,32 @@
-from rest_framework.response import Response
-from rest_framework import status
+import json
+
+from django.http import HttpResponse
 
 
-class UserOrderPresenter:
+class CreateUserOrderPresenter:
+
     @staticmethod
-    def present_create(order):
+    def present_order_creation_success(order_data: dict):
         response_data = {
-            "order_id": str(order.order_id),
-            "total_amount": str(order.total_amount),
-            "order_created_at": order.order_created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            "order_updated_at": order.order_updated_at.strftime('%Y-%m-%d %H:%M:%S'),
-            "user_id": order.user_id,
-            "status": order.status,
+            "order_id": order_data["order_id"],
+            "total_amount": order_data["total_amount"],
+            "status": order_data["status"],
+            "total_items_count": len(order_data["items"]),
+            "items": order_data["items"]
         }
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return HttpResponse(status=200, content=json.dumps(response_data))
 
     @staticmethod
-    def present_get(order_details):
-        if order_details is None:
-            return Response({"detail": "Order not found"},
-                            status=status.HTTP_404_NOT_FOUND)
+    def present_order_creation_failure(error_message: str):
+        return HttpResponse(status=400,
+                            content=json.dumps({"errors": error_message}))
 
-        return Response(order_details, status=status.HTTP_200_OK)
+    @staticmethod
+    def present_invalid_order_data(validation_errors: dict):
+        return HttpResponse(
+            status=400,
+            content=json.dumps({
+                "error": "Invalid Data",
+                "details": validation_errors
+            })
+        )

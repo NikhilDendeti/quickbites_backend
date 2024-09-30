@@ -24,15 +24,14 @@ class Category(models.Model):
 
 
 class FoodItem(models.Model):
-    item_id = models.UUIDField(primary_key=True, editable=False,
-                               default=uuid.uuid4)
-    name = models.CharField(max_length=150)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    item_id = models.CharField(primary_key=True, max_length=255)
+    name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField()
-    item_image_url = models.URLField()
-    is_veg = models.BooleanField()
-    is_available = models.BooleanField()
+    description = models.TextField(null=True, blank=True)
+    is_veg = models.BooleanField(default=True)
+    is_available = models.BooleanField(default=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    count=models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

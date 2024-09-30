@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 
 
-@api_view(["POST"])
+@api_view(["GET"])
 def get_profile_details(request):
     user = request.user
     user_id = user.user_id

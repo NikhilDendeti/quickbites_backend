@@ -24,3 +24,4 @@ class UserOrderItem(models.Model):
     item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
     item_price = models.DecimalField(max_digits=10, decimal_places=2,
                                      default=0)
+    count= models.IntegerField(default=1)
