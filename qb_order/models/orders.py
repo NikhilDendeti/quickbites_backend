@@ -11,14 +11,14 @@ class UserOrder(models.Model):
                                        default=0)
     order_created_at = models.DateTimeField(auto_now_add=True)
     order_updated_at = models.DateTimeField(auto_now=True)
-    user_id = models.CharField(editable=False, max_length=150)
+    user_id = models.CharField(db_index=True, max_length=150)
     status = models.CharField(max_length=150,
                               choices=OrderStatus.choices(),
                               default=OrderStatus.IN_PROGRESS.value)
 
 
 class UserOrderItem(models.Model):
-    order_id = models.ForeignKey(UserOrder, on_delete=models.CASCADE)
+    order = models.ForeignKey(UserOrder, on_delete=models.CASCADE)
     user_order_item_id = models.UUIDField(primary_key=True, editable=False,
                                           default=uuid.uuid4)
     item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)

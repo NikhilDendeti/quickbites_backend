@@ -8,8 +8,8 @@ class GetUserOrderDetailsInteractor:
     def __init__(self, user_order_storage: UserOrderStorage):
         self.user_order_storage = user_order_storage
 
-    def get_user_order_details_wrapper(self, user_id: str,
-                                       presenter: GetUserOrderDetailsPresenter):
+    def get_user_order_details_wrapper(
+            self, user_id: str, presenter: GetUserOrderDetailsPresenter):
         try:
             return self.get_user_order_details(user_id, presenter)
         except InvalidUserIdException:
