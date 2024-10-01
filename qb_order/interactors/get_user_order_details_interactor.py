@@ -1,49 +1,28 @@
-from rest_framework.exceptions import ValidationError
+from qb_order.exceptions import InvalidUserIdException
+from qb_order.presenters.get_user_order_details_presenter import \
+    GetUserOrderDetailsPresenter
+from qb_order.storages.get_user_order_details_storage import UserOrderStorage
 
-from qb_order.serializers import CreateUserOrderSerializer
 
+class GetUserOrderDetailsInteractor:
+    def __init__(self, user_order_storage: UserOrderStorage):
+        self.user_order_storage = user_order_storage
 
-class CreateUserOrderInteractor:
-    def __init__(self, storage):
-        self.storage = storage
+    def get_user_order_details_wrapper(self, user_id: str,
+                                       presenter: GetUserOrderDetailsPresenter):
+        try:
+            return self.get_user_order_details(user_id, presenter)
+        except InvalidUserIdException:
+            return presenter.raise_invalid_user_id_exception()
+        except Exception as e:
+            return presenter.raise_unexpected_error_response(str(e))
 
-    def execute(self, request_body: dict):
-        serializer = CreateUserOrderSerializer(data=request_body)
-        if not serializer.is_valid():
-            raise ValidationError(serializer.errors)
+    def get_user_order_details(self, user_id: str,
+                               presenter: GetUserOrderDetailsPresenter):
+        user_orders = self.user_order_storage.get_user_order_details(
+            user_id=user_id)
 
-        order_data = serializer.validated_data
-        total_items_count = len(order_data['items'])
-        total_amount = sum(
-            item['total_amount'] for item in order_data['items'])
+        if not user_orders:
+            return presenter.raise_order_not_found_exception()
 
-        order, order_items = self.storage.create_user_order(
-            order_data=order_data)
-
-        order_dict = {
-            "order_id": str(order.order_id),
-            "total_amount": order.total_amount,
-            "status": order.status,
-            "order_created_at": order.order_created_at,
-            "order_updated_at": order.order_updated_at,
-        }
-
-        order_items_dict = [
-            {
-                "user_order_item_id": str(item.user_order_item_id),
-                "item_id": str(item.item.item_id),
-                "item_price": item.item_price,
-                "count": item.count
-            }
-            for item in order_items
-        ]
-
-        return {
-            "order_id": order_dict['order_id'],
-            "total_amount": total_amount,
-            "status": order_dict['status'],
-            "order_created_at": order_dict['order_created_at'],
-            "order_updated_at": order_dict['order_updated_at'],
-            "total_items_count": total_items_count,
-            "items": order_items_dict
-        }
+        return presenter.get_user_order_details_response(user_orders)

@@ -25,6 +25,7 @@ class Category(models.Model):
 
 class FoodItem(models.Model):
     item_id = models.CharField(primary_key=True, max_length=255)
+    item_image_url=models.URLField()
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(null=True, blank=True)

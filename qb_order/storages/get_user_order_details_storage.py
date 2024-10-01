@@ -1,59 +1,48 @@
-from qb_order.dtos import UserOrderDTO
-from qb_order.exceptions import InvalidUserIdException, ItemNotFoundException
-from qb_order.models.items import FoodItem
-from qb_order.models.orders import UserOrderItem, UserOrder
+from typing import List
+
+from qb_order.exceptions import OrderNotFoundException
+from qb_order.models.orders import UserOrder, UserOrderItem
+from qb_users.models import UserAccount
 
 
 class UserOrderStorage:
 
     @staticmethod
-    def create_user_order(order_data: dict):
-        order = UserOrder.objects.create(
-            user_id=order_data['user_id'],
-            total_amount=order_data['total_amount'],
-            status=order_data['status']
-        )
-        order.save()
+    def is_valid_user(user_id: str) -> bool:
 
-        order_items = []
-        for item_data in order_data['items']:
-            try:
-                food_item = FoodItem.objects.get(item_id=item_data['item_id'])
-            except FoodItem.DoesNotExist:
-                raise ItemNotFoundException(
-                    f"Item with ID {item_data['item_id']} not found.")
-
-            order_item = UserOrderItem.objects.create(
-                order_id=order,
-                item=food_item,
-                item_price=item_data['total_amount'] / item_data['count'],
-                count=item_data['count']
-            )
-
-            order_items.append(order_item)
-
-        return order, order_items
+        return UserAccount.objects.filter(id=user_id).exists()
 
     @staticmethod
-    def get_user_order_by_user_id(user_id: str) -> list:
-        try:
-            user_orders = UserOrder.objects.filter(user_id=user_id)
-        except UserOrder.DoesNotExist:
-            raise InvalidUserIdException("No orders found for this user ID.")
+    def get_user_order_details(user_id: str) -> List[dict]:
 
-        return [UserOrderStorage._get_user_order_dto_from_obj(order) for order
-                in user_orders]
+        orders = UserOrder.objects.filter(user_id=user_id)
 
-    @staticmethod
-    def _get_user_order_dto_from_obj(order):
-        return UserOrderDTO(
-            order_id=str(order.order_id),
-            total_amount=order.total_amount,
-            status=order.status,
-            order_created_at=order.order_created_at.isoformat(),
-            order_updated_at=order.order_updated_at.isoformat()
-        )
+        if not orders.exists():
+            raise OrderNotFoundException("No orders found for this user")
 
-    @staticmethod
-    def is_order_exists(order_id: str) -> bool:
-        return UserOrder.objects.filter(order_id=order_id).exists()
+        order_items = UserOrderItem.objects.filter(
+            order__in=orders).select_related('item')
+
+        user_order_details = []
+        for order in orders:
+            items = [
+                {
+                    "item_id": str(order_item.item.item_id),
+                    "count": 1,
+                    "total_amount": str(order_item.item_price)
+                }
+                for order_item in order_items if order_item.order == order
+            ]
+
+            user_order_details.append({
+                "order_id": str(order.order_id),
+                "total_amount": str(order.total_amount),
+                "order_created_at": order.order_created_at.isoformat(),
+                "order_updated_at": order.order_updated_at.isoformat(),
+                "user_id": str(order.user_id),
+                "status": order.status,
+                "total_items_count": len(items),
+                "items": items
+            })
+
+        return user_order_details

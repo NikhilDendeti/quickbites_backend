@@ -1,32 +1,22 @@
-from rest_framework.decorators import api_view, authentication_classes, \
-    permission_classes
-from rest_framework.exceptions import ValidationError
+from rest_framework.decorators import api_view
 
-from qb_order.interactors.get_user_order_details_interactor import \
-    CreateUserOrderInteractor
-from qb_order.presenters.get_user_order_details_presenter import \
-    CreateUserOrderPresenter
 from qb_order.storages.get_user_order_details_storage import UserOrderStorage
 
 
-@api_view(["POST"])
-@authentication_classes([])
-@permission_classes([])
-def create_user_order(request):
-    request_data = request.data
+@api_view(["GET"])
+def get_user_order_details(request):
+    user = request.user
+    user_id = user.user_id
+    from qb_order.interactors.get_user_order_details_interactor import \
+        GetUserOrderDetailsInteractor
 
-    storage = UserOrderStorage()
-    interactor = CreateUserOrderInteractor(storage)
-    presenter = CreateUserOrderPresenter()
+    from qb_order.presenters.get_user_order_details_presenter import \
+        GetUserOrderDetailsPresenter
 
-    try:
-        order_data = interactor.execute(request_body=request_data)
-        response = presenter.present_order_creation_success(order_data)
+    presenter = GetUserOrderDetailsPresenter()
+    user_order_storage = UserOrderStorage()
+    interactor = GetUserOrderDetailsInteractor(
+        user_order_storage=user_order_storage)
 
-    except ValidationError as e:
-        response = presenter.present_invalid_order_data(e.detail)
-
-    except Exception as e:
-        response = presenter.present_order_creation_failure(str(e))
-
-    return response
+    return interactor.get_user_order_details_wrapper(user_id=user_id,
+                                                     presenter=presenter)
