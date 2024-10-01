@@ -39,12 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'qb_users',
+    'corsheaders',
     'oauth2_provider',
     'rest_framework',
     'qb_order'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -151,3 +154,6 @@ OAUTH2_PROVIDER = {
 
 CLIENT_ID = "ntMteXULnGTDD3b96uYYKxMGbICU9W2PgXWYIxUL"
 CLIENT_SECRET = "CgZb8pjHwIX3M6Am4Bj1jmAMnpI0MuebLCoeWg1OVVLV8g38yxUp5LpzSzS7RZUYGCJrz2uQIuIuIE5wblL7cEl5evBhOwP7Hv2HjcvrHfHrAUz5sREQBF0irbuCAkQF"
+
+CORS_ALLOW_ALL_ORIGINS = True
+

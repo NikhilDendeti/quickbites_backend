@@ -1,26 +1,33 @@
+import json
 from typing import List
-
+from django.http import HttpResponse
 from qb_order.dtos import CategoryDTO
-
 
 class GetCategoryPresenter:
     @staticmethod
-    def get_categories_response(categories: List[CategoryDTO]):
-        return {
-            "categories": [
-                {
-                    "category_id": category.category_id,
-                    "name": category.name,
-                    "items": [
-                        {
-                            "item_id": item.item_id,
-                            "name": item.name,
-                            "description": item.description,
-                            "item_image_url": item.item_image_url,
-                            "is_veg": item.is_veg,
-                            "price": item.price
-                        } for item in category.items
-                    ]
-                } for category in categories
-            ]
+    def get_categories_response(categories: List[CategoryDTO]) -> HttpResponse:
+        response_data = {
+            "categories": [category.to_dict() for category in categories]
         }
+        return HttpResponse(
+            content=json.dumps(response_data),
+            status=200
+        )
+
+    @staticmethod
+    def raise_no_categories_found_exception() -> HttpResponse:
+        return HttpResponse(
+            content=json.dumps({
+                "message": "No categories found"
+            }),
+            status=404
+        )
+
+    @staticmethod
+    def raise_unexpected_error_response(error_message: str) -> HttpResponse:
+        return HttpResponse(
+            content=json.dumps({
+                "message": f"An unexpected error occurred: {error_message}"
+            }),
+            status=500
+        )

@@ -1,8 +1,14 @@
 class ObjectDoesNotExist(Exception):
     pass
+
+
 class InvalidUserIdException(Exception):
     pass
-class OrderNotFoundException(Exception):
+
+
+class SomeSpecificException(Exception):
     pass
-class OrderNotFoundException(Exception):
+
+
+class NoCategoriesFoundException(Exception):
     pass
