@@ -1,3 +1,4 @@
+
 import json
 from typing import List
 from django.http import HttpResponse
@@ -21,6 +22,15 @@ class GetCategoryPresenter:
                 "message": "No categories found"
             }),
             status=404
+        )
+
+    @staticmethod
+    def raise_specific_exception() -> HttpResponse:
+        return HttpResponse(
+            content=json.dumps({
+                "message": "A specific error occurred while processing your request"
+            }),
+            status=400
         )
 
     @staticmethod

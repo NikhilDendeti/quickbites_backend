@@ -8,7 +8,7 @@ from qb_users.storages.user_profile_storage import UserProfileStorage
 class TestCreateUserAccount(TestCase):
 
     def test_create_user_account_case(self):
-        # Arrange
+          # Arrange
         storage=UserProfileStorage()
         username = "user_1"
         email = "user1@example.com"

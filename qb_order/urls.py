@@ -1,6 +1,3 @@
-from qb_order.views import get_categories
-from django.urls import path
-
 from django.urls import path
 
 from qb_order.views.get_categories import get_categories
