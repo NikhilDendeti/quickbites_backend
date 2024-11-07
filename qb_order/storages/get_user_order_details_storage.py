@@ -11,7 +11,7 @@ class UserOrderStorage:
             '-order_created_at')
 
         if not orders.exists():
-            return {"message": "No IN_PROGRESS orders found for this user"}
+            return None  # Return None instead of a dictionary
 
         recent_order = orders.first()
 

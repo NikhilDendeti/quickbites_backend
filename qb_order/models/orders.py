@@ -18,7 +18,7 @@ class UserOrder(models.Model):
 
 
 class UserOrderItem(models.Model):
-    order = models.ForeignKey(UserOrder, on_delete=models.CASCADE)
+    order = models.ForeignKey(UserOrder, on_delete=models.CASCADE,related_name="items")
     user_order_item_id = models.UUIDField(primary_key=True, editable=False,
                                           default=uuid.uuid4)
     item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)

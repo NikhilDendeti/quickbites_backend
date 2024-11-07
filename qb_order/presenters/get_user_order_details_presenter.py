@@ -7,7 +7,8 @@ from qb_order.dtos import UserOrderDTO
 
 class GetUserOrderDetailsPresenter:
     @staticmethod
-    def get_user_order_details_response(order_details: UserOrderDTO) -> HttpResponse:
+    def get_user_order_details_response(
+            order_details: UserOrderDTO) -> HttpResponse:
         response_data = {
             "order_details": order_details.to_dict(),
             "message": "User order details retrieved successfully",
@@ -16,7 +17,6 @@ class GetUserOrderDetailsPresenter:
             content=json.dumps(response_data),
             status=200
         )
-
 
     @staticmethod
     def raise_order_not_found_exception() -> HttpResponse:

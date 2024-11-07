@@ -22,7 +22,7 @@ class GetUserOrderDetailsInteractor:
         user_orders = self.user_order_storage.get_user_order_details(
             user_id=user_id)
 
-        if not user_orders:
+        if user_orders is None:
             return presenter.raise_order_not_found_exception()
 
         return presenter.get_user_order_details_response(user_orders)
