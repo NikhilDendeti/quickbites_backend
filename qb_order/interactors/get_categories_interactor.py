@@ -30,9 +30,6 @@
 #
 #
 
-import re
-
-from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from qb_order.exceptions import SomeSpecificException
@@ -64,4 +61,3 @@ class GetCategoriesInteractor:
     def get_categories(self):
 
         return self.storage.get_all_categories_with_items()
-

@@ -142,10 +142,10 @@ class OrderItemDTO:
     count: int
     total_amount: float
 
-    def __init__(self, item_id: UUID, count: int, total_amount: float):
+    def __init__(self, item_id, count, total_amount):
         self.item_id = str(item_id)
         self.count = count
-        self.total_amount = total_amount
+        self.total_amount = float(total_amount) if isinstance(total_amount, Decimal) else total_amount
 
     def to_dict(self):
         return {
@@ -166,12 +166,9 @@ class UserOrderDTO:
     total_items_count: int
     items: List[OrderItemDTO]
 
-    def __init__(self, order_id: UUID, total_amount: float,
-                 order_created_at: str, order_updated_at: str,
-                 user_id: UUID, status: str,
-                 total_items_count: int, items: List[OrderItemDTO]):
+    def __init__(self, order_id, total_amount, order_created_at, order_updated_at, user_id, status, total_items_count, items):
         self.order_id = str(order_id)
-        self.total_amount = total_amount
+        self.total_amount = float(total_amount) if isinstance(total_amount, Decimal) else total_amount
         self.order_created_at = order_created_at
         self.order_updated_at = order_updated_at
         self.user_id = str(user_id)
@@ -226,9 +223,15 @@ class UserTokenDTO(TokenDTO):
 
 # Custom JSON Encoder to handle UUIDs
 import json
+from decimal import Decimal
+from uuid import UUID
 
 class UUIDEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, UUID):
             return str(obj)
+        elif isinstance(obj, Decimal):
+            return float(obj)
         return super().default(obj)
+
+

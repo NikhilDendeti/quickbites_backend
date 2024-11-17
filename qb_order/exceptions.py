@@ -12,3 +12,7 @@ class SomeSpecificException(Exception):
 
 class NoCategoriesFoundException(Exception):
     pass
+
+
+class NoOrdersFoundException(Exception):
+    pass

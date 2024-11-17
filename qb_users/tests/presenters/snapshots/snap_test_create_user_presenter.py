@@ -26,7 +26,7 @@ snapshots['TestCreateUserPresenter.test_for_invalid_user_name_length response_da
 
 snapshots['TestCreateUserPresenter.test_for_success_case response_data'] = {
     'access_token': 'access_toekn_1',
-    'expires_in': '100',
+    'expires_in': 100,
     'refresh_token': 'refresh_token_1',
     'user_id': 'user_id_1'
 }

@@ -1,5 +1,4 @@
 import json
-from qb_order.dtos import CategoryDTO
 
 
 class TestGetCategoryPresenter:

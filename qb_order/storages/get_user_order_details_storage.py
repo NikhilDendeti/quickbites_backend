@@ -11,7 +11,7 @@ class UserOrderStorage:
             '-order_created_at')
 
         if not orders.exists():
-            return None  # Return None instead of a dictionary
+            return None
 
         recent_order = orders.first()
 

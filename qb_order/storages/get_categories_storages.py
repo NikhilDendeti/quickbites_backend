@@ -1,8 +1,10 @@
 from typing import List
+
 from qb_order.dtos import CategoryDTO, FoodItemDTO
-from qb_order.models.items import Category, FoodItem
 from qb_order.exceptions import \
     NoCategoriesFoundException
+from qb_order.models.items import Category, FoodItem
+
 
 class GetCategoryStorage:
     @staticmethod

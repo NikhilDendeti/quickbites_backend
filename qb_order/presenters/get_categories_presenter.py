@@ -1,8 +1,10 @@
-
 import json
 from typing import List
+
 from django.http import HttpResponse
+
 from qb_order.dtos import CategoryDTO
+
 
 class GetCategoryPresenter:
     @staticmethod
